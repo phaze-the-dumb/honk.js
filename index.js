@@ -9,16 +9,6 @@ class HONK{
         }
     }
 
-    stringify(){
-        let processObject = ( obj ) => {
-
-        }
-
-        let processArray = ( array ) => {
-            
-        }
-    }
-
     parse(){
         let lines = this.raw.split('\r\n');
 
