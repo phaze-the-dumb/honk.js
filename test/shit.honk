@@ -1,0 +1,13 @@
+- mobs:
+    - skel:
+        - health: 10
+        - damage: 20
+        - name: skel
+    - zomb:
+        - health: 5
+        - damage: 10
+        - name: zomb
+    - goblin:
+        - health: 4
+        - damage: 40
+        - name: goblin

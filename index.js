@@ -11,7 +11,7 @@ class HONK{
 
     stringify(){
         let processObject = ( obj ) => {
-            
+
         }
 
         let processArray = ( array ) => {
@@ -97,7 +97,10 @@ class HONK{
                         currentParent.parent = tmpParent;
                         tmpParent.push(currentParent);
                     } else{
-                        currentParent.push(splitLine[0].trim());
+                        if(splitLine[1])
+                            currentParent[splitLine[0].trim()] = splitLine[1].trim();
+                        else
+                            currentParent.push(splitLine[0].trim());
                     }
                 } else if(splitLine[1])
                     currentParent[splitLine[0].trim()] = this.convertString(splitLine[1]);
@@ -161,11 +164,11 @@ class HONK{
                         parent: this.data
                     };
                 else{
-                    this.data[splitLine[0]] = [];
-                    this.data[splitLine[0]].parent = this.data;
+                    this.data[splitLine[0].replace(':', '')] = [];
+                    this.data[splitLine[0].replace(':', '')].parent = this.data;
                 }
 
-                currentParent = this.data[splitLine[0]];
+                currentParent = this.data[splitLine[0].replace(':', '')];
             } else
                 // Single values
                 this.data[splitLine[0]] = this.convertString(splitLine[1]);
