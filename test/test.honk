@@ -1,0 +1,38 @@
+Anything not starting with - is a comment
+Object test
+
+- My Key: My Value
+
+- My Array 1:
+    - Element 1
+    - Element 2
+    - Element 3
+
+- My Object 1:
+    - My Key 1: My Value 1
+    - My Key 2: My Value 2
+    - My Key 3: My Value 3
+
+    - My Object 2:
+        - My Key 1: My Value 1
+        - My Key 2: My Value 2
+
+        - My Object 3:
+            - My Key 1: My Value 1
+            - My Key 2: My Value 2
+
+        - My Array 2:
+            - My Value 1
+            - My Value 2
+
+    - My Array 3:
+        - My Value 1
+        - My Value 2
+
+        - My Array 4:
+            - My Value 1
+            - My Value 2
+
+        - My Array 5:
+            - My Value 1
+            - My Value 2

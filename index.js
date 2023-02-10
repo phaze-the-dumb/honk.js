@@ -1,0 +1,189 @@
+class HONK{
+    constructor( input ){
+        this.raw = null;
+        this.data = null;
+        this.debug = false;
+
+        if(input){
+            this.raw = input.toString();
+        }
+    }
+
+    stringify(){
+        let processObject = ( obj ) => {
+            
+        }
+
+        let processArray = ( array ) => {
+            
+        }
+    }
+
+    parse(){
+        let lines = this.raw.split('\r\n');
+
+        // Remove any lines that don't start with "-" and remove "-" from lines that do
+        let newLines = [];
+
+        lines.forEach(l => {
+            if(l.trim().startsWith('- ')){
+                newLines.push(l.replace('- ', ''));
+            }
+        });
+
+        lines = newLines;
+        return this.parseObject(lines);
+    }
+
+    parseObject( lines ){
+        this.data = {};
+        let currentParent = null;
+        let lastIndent = 0;
+
+        // Add keys/values to the data of the object
+        lines.forEach((l, index) => {
+            // Count the indents at the start of the line
+            let indents = 0;
+            let inWord = false;
+
+            l.split('').forEach(char => {
+                if(char === ' ' && !inWord)
+                    indents += 0.25;
+                else
+                    inWord = true;
+            })
+
+            indents = Math.floor(indents);
+            let splitLine = l.split(': ');
+
+            if(indents < lastIndent){
+                let idnts = Math.abs(indents - lastIndent);
+                lastIndent = indents;
+                if(this.debug)
+                    console.log(index, indents, idnts, l)
+
+                if(idnts == 0)return;
+                for (let i = 0; i < idnts; i++)
+                    currentParent = currentParent.parent;
+            }
+
+            if(indents > 0){
+                if(!currentParent)
+                    throw new Error("Object/Array doesn't exist")
+
+                if(Array.isArray(currentParent)) {
+                    if(splitLine[0].trim().endsWith(':')){
+                        // Check if vaild array
+                        let nxtLine = lines[index + 1];
+                        let indents2 = 0;
+                        let inWord2 = false;
+    
+                        nxtLine.split('').forEach(char => {
+                            if(char === ' ' && !inWord2)
+                                indents2 += 0.25;
+                            else 
+                                inWord2 = true;
+                        });
+    
+                        indents2 = Math.floor(indents2);
+                        lastIndent = indents2;
+    
+                        if(indents2 == 0)
+                            throw new Error("Not a vaild object/array: "+splitLine[0])
+
+                        let tmpParent = currentParent;
+                        currentParent = [];
+
+                        currentParent.parent = tmpParent;
+                        tmpParent.push(currentParent);
+                    } else{
+                        currentParent.push(splitLine[0].trim());
+                    }
+                } else if(splitLine[1])
+                    currentParent[splitLine[0].trim()] = this.convertString(splitLine[1]);
+                else{
+                    // Check if a vaild object
+                    let nxtLine = lines[index + 1];
+                    let indents2 = 0;
+                    let inWord2 = false;
+
+                    nxtLine.split('').forEach(char => {
+                        if(char === ' ' && !inWord2)
+                            indents2 += 0.25;
+                        else 
+                            inWord2 = true;
+                    });
+
+                    indents2 = Math.floor(indents2);
+                    lastIndent = indents2;
+
+                    if(indents2 == 0)
+                        throw new Error("Not a vaild object/array: "+splitLine[0])
+
+                    // Check if its an array or object
+                    if(nxtLine.includes(': '))
+                        currentParent[splitLine[0].trim()] = {
+                            parent: currentParent
+                        };
+                    else {
+                        let tmpParent = currentParent;
+
+                        currentParent[splitLine[0].trim()] = [];
+                        currentParent[splitLine[0].trim()].parent = tmpParent;
+                    }
+
+                    currentParent = currentParent[splitLine[0].trim()];
+                }
+
+                return;
+            };
+            
+            if(!splitLine[1]){
+                // Check if a vaild object
+                let nxtLine = lines[index + 1];
+                let indents2 = 0;
+                let inWord2 = false;
+
+                nxtLine.split('').forEach(char => {
+                    if(char === ' ' && !inWord2)
+                        indents2 += 0.25;
+                    else 
+                        inWord2 = true;
+                });
+
+                indents2 = Math.floor(indents2);
+                if(indents2 == 0)
+                    throw new Error("Not a vaild object/array: "+splitLine[0])
+
+                // Check if its an array or object
+                if(nxtLine.includes(': '))
+                    this.data[splitLine[0]] = {
+                        parent: this.data
+                    };
+                else{
+                    this.data[splitLine[0]] = [];
+                    this.data[splitLine[0]].parent = this.data;
+                }
+
+                currentParent = this.data[splitLine[0]];
+            } else
+                // Single values
+                this.data[splitLine[0]] = this.convertString(splitLine[1]);
+        })
+    }
+
+    convertString( str ){
+        if(!isNaN(parseInt(str)))
+            return parseInt(str);
+        else if(!isNaN(parseFloat(str)))
+            return parseFloat(str);
+        else if(str === 'true')
+            return true;
+        else if(str === 'false')
+            return false;
+        else
+            return str;
+    }
+}
+
+module.exports = HONK;
