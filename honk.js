@@ -59,7 +59,7 @@ class HONK{
 
             if(indents > 0){
                 if(!currentParent)
-                    throw new Error("Object/Array doesn't exist")
+                    throw new Error("Object/Array doesn't exist, Line "+l.trim())
 
                 if(Array.isArray(currentParent)) {
                     if(splitLine[0].trim().endsWith(':')){
@@ -150,7 +150,7 @@ class HONK{
 
                 // Check if its an array or object
                 if(nxtLine.includes(': '))
-                    this.data[splitLine[0]] = {
+                    this.data[splitLine[0].replace(':', '')] = {
                         parent: this.data
                     };
                 else{
