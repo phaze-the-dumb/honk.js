@@ -87,14 +87,24 @@ class HONK{
                         currentParent.parent = tmpParent;
                         tmpParent.push(currentParent);
                     } else{
-                        if(splitLine[1])
-                            currentParent[splitLine[0].trim()] = splitLine[1].trim();
-                        else
+                        if(splitLine[1]){
+                            let key = splitLine[0].trim();
+
+                            splitLine.shift();
+                            splitLine = splitLine.join(': ');
+
+                            currentParent[key] = splitLine;
+                        } else
                             currentParent.push(splitLine[0].trim());
                     }
-                } else if(splitLine[1])
-                    currentParent[splitLine[0].trim()] = this.convertString(splitLine[1]);
-                else{
+                } else if(splitLine[1]){
+                    let key = splitLine[0].trim();
+
+                    splitLine.shift();
+                    splitLine = splitLine.join(': ');
+
+                    currentParent[key] = this.convertString(splitLine);
+                } else{
                     // Check if a vaild object
                     let nxtLine = lines[index + 1];
                     let indents2 = 0;
