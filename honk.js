@@ -67,6 +67,9 @@ class HONK{
                     splitLine.shift();
                     splitLine = splitLine.join(': ');
 
+                    if(this.debug)
+                        console.log('Original:', l, 'Parsed:', key, splitLine);
+
                     currentParent[key] = this.convertString(splitLine);
                 } else{
                     // Check if a vaild object
@@ -87,6 +90,8 @@ class HONK{
                     if(indents2 == 0)
                         throw new Error("Not a vaild object/array: "+splitLine[0])
 
+                    splitLine = splitLine.join(': ').split(':');
+
                     // Check if its an array or object
                     if(nxtLine.includes(': '))
                         currentParent[splitLine[0].trim()] = {
@@ -98,6 +103,9 @@ class HONK{
                         currentParent[splitLine[0].trim()] = [];
                         currentParent[splitLine[0].trim()].parent = tmpParent;
                     }
+
+                    if(this.debug)
+                        console.log('Original:', l, 'Parsed:', splitLine);
 
                     currentParent = currentParent[splitLine[0].trim()];
                 }
@@ -123,6 +131,9 @@ class HONK{
                     throw new Error("Not a vaild object/array: "+splitLine[0])
 
                 // Check if its an array or object
+                if(this.debug)
+                    console.log(splitLine, nxtLine, nxtLine.includes(': '));
+
                 if(nxtLine.includes(': '))
                     this.data[splitLine[0].replace(':', '')] = {
                         parent: this.data
