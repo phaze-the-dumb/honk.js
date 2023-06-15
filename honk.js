@@ -198,9 +198,9 @@ class HONK{
     }
 
     convertString( str ){
-        if(!isNaN(parseInt(str)))
+        if(!isNaN(parseInt(str)) && str.split('.').length < 2)
             return parseInt(str);
-        else if(!isNaN(parseFloat(str)))
+        else if(!isNaN(parseFloat(str)) && str.split('.').length < 3)
             return parseFloat(str);
         else if(str === 'true')
             return true;

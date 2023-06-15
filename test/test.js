@@ -2,7 +2,7 @@ const HONK = require('../');
 const util = require('util');
 const fs = require('fs');
 
-let buff = fs.readFileSync(__dirname + '/shit.honk');
+let buff = fs.readFileSync(__dirname + '/test.honk');
 let startTime = Date.now();
 
 let h = new HONK(buff);
