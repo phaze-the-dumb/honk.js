@@ -100,7 +100,7 @@ class HONK{
                             throw new Error("Not a vaild object/array: "+splitLine[0])
 
                             if(nxtLine.includes(': '))
-                            currentParent[splitLine[0].trim()] = {
+                            currentParent[splitLine[0].replace(':', '').trim()] = {
                                 parent: currentParent
                             };
                         else {
@@ -153,7 +153,7 @@ class HONK{
                         console.log('Next line is object: '+nxtLine.includes(': '));
 
                     if(nxtLine.includes(': '))
-                        currentParent[splitLine[0].trim()] = {
+                        currentParent[splitLine[0].replace(':', '').trim()] = {
                             parent: currentParent
                         };
                     else {
@@ -163,7 +163,7 @@ class HONK{
                         currentParent[splitLine[0].replace(':', '').trim()].parent = tmpParent;
                     }
 
-                    currentParent = currentParent[splitLine[0].trim().replace(':', '')];
+                    currentParent = currentParent[splitLine[0].replace(':', '').trim()];
 
                     if(this.debug)
                         console.log('       ' + splitLine[0].trim(), currentParent);
