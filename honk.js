@@ -106,13 +106,13 @@ class HONK{
                         else {
                             let tmpParent = currentParent;
     
-                            currentParent[splitLine[0].trim()] = [];
-                            currentParent[splitLine[0].trim()].parent = tmpParent;
+                            currentParent[splitLine[0].replace(':', '').trim()] = [];
+                            currentParent[splitLine[0].replace(':', '').trim()].parent = tmpParent;
                         }
     
-                        currentParent = currentParent[splitLine[0].trim()];
+                        currentParent = currentParent[splitLine[0].replace(':', '').trim()];
                     } else
-                        currentParent.push(this.convertString(splitLine[0].trim()));
+                        currentParent.push(this.convertString(splitLine[0].replace(':', '').trim()));
                 } else if((splitLine[1] && splitLine[1].trim() !== '')){
                     if(this.debug)
                         console.log('gggggggggg');
@@ -159,11 +159,11 @@ class HONK{
                     else {
                         let tmpParent = currentParent;
 
-                        currentParent[splitLine[0].trim()] = [];
-                        currentParent[splitLine[0].trim()].parent = tmpParent;
+                        currentParent[splitLine[0].replace(':', '').trim()] = [];
+                        currentParent[splitLine[0].replace(':', '').trim()].parent = tmpParent;
                     }
 
-                    currentParent = currentParent[splitLine[0].trim()];
+                    currentParent = currentParent[splitLine[0].trim().replace(':', '')];
 
                     if(this.debug)
                         console.log('       ' + splitLine[0].trim(), currentParent);
