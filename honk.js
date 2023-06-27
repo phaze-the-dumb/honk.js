@@ -56,7 +56,7 @@ class HONK{
             }
 
             if(this.debug)
-                console.log(index, indents, Math.abs(indents - lastIndent), l, splitLine)
+                console.log(index, indents, Math.abs(indents - lastIndent), l, splitLine, Array.isArray(currentParent));
 
             if(indents > 0){
                 if(!currentParent)
@@ -81,10 +81,36 @@ class HONK{
                     indents2 = Math.floor(indents2);
 
                     if(indents2 - indents > 0){
-                        let tmpParent = currentParent;
-                        currentParent = [];
+                        // Check if a vaild object
+                        let nxtLine = lines[index + 1];
+                        let indents3 = 0;
+                        let inWord3 = false;
 
-                        currentParent.parent = tmpParent;
+                        nxtLine.split('').forEach(char => {
+                            if(char === ' ' && !inWord3)
+                                indents3 += 0.25;
+                            else 
+                                inWord3 = true;
+                        });
+
+                        indents3 = Math.floor(indents3);
+                        lastIndent = indents3;
+
+                        if(indents3 == 0)
+                            throw new Error("Not a vaild object/array: "+splitLine[0])
+
+                            if(nxtLine.includes(': '))
+                            currentParent[splitLine[0].trim()] = {
+                                parent: currentParent
+                            };
+                        else {
+                            let tmpParent = currentParent;
+    
+                            currentParent[splitLine[0].trim()] = [];
+                            currentParent[splitLine[0].trim()].parent = tmpParent;
+                        }
+    
+                        currentParent = currentParent[splitLine[0].trim()];
                     } else
                         currentParent.push(this.convertString(splitLine[0].trim()));
                 } else if((splitLine[1] && splitLine[1].trim() !== '')){
@@ -99,10 +125,10 @@ class HONK{
                     currentParent[key] = this.convertString(splitLine);
 
                     if(this.debug)
-                        console.log('       ' + key + ': ' + this.convertString(splitLine));
+                        console.log('       ' + key, this.convertString(splitLine));
                 } else{
                     if(this.debug)
-                        console.log('hhhhhhhhh', lines, lines.length, index, lines[index + 1]);
+                        console.log('hhhhhhhhh');
 
                     // Check if a vaild object
                     let nxtLine = lines[index + 1];
@@ -140,7 +166,7 @@ class HONK{
                     currentParent = currentParent[splitLine[0].trim()];
 
                     if(this.debug)
-                        console.log('       ' + splitLine[0].trim() + ':', currentParent);
+                        console.log('       ' + splitLine[0].trim(), currentParent);
                 }
 
                 return;
@@ -179,13 +205,14 @@ class HONK{
                 currentParent = this.data[splitLine[0].replace(':', '')];
 
                 if(this.debug)
-                    console.log('       ' + splitLine[0].trim() + ':', currentParent);
-            } else
+                    console.log('       ' + splitLine[0].trim(), currentParent);
+            } else{
                 // Single values
                 this.data[splitLine[0]] = this.convertString(splitLine[1]);
                 
                 if(this.debug)
-                    console.log('       ' + splitLine[0].trim() + ':', this.convertString(splitLine[1]));
+                    console.log('       ' + splitLine[0].trim(), this.convertString(splitLine[1]));
+            }
         })
     }
 
